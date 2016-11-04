@@ -1,0 +1,118 @@
+! Mounika Madireddy
+! Roster Number = 13
+! CMPS 5113 Advanced Programming Languages    Project 1: Fortran
+! This program gets the coefficients of quadratic equation from  the user and then calculates 
+! the discriminant by using the formula d=b2-4ac and if the discriminant is less than 0 then complex roots exists and
+! if discriminant is greater than 0  then real roots exists and if the discriminant is equal to 0 then repeated root exists. 
+
+
+
+! The below subroutine prints the name and short description of a program to standard output.
+subroutine heading()
+ print *, 'Mounika Madireddy'
+ print *, ' '
+ print *, 'Rosternumber=13'
+ print *, ' '
+ print*,'This program reads the coefficients of a quadratic equation,'
+ print *,'and returns the roots of the quadratic equation if the rooots exists.'
+ print *, ' '
+ return
+end
+
+!The below subroutine reads the coefficients of quadratic equation from standard output 
+subroutine getCoefficients(a,b,c)
+    implicit none
+	real ::  a, b, c
+    ! read the coefficients of quadratic equation from the terminal
+    print *,'enter the coefficients values a,b,c for quadratic equation'
+    read(*,*) a, b, c
+    return 
+end
+
+!This function calulates the discriminant dalue (d=b2-4ac)
+function discriminant(a,b,c)
+	real ::discriminant
+    real :: a,b,c
+    discriminant = (b*b)-(4*a*c)
+    return
+end function 
+
+! This subroutine is called when discriminant is greater than 0 ,and returns realroots of an equation.
+subroutine getRealRoots(d,b,a)
+	implicit none
+    real :: root1,root2
+    real :: b,d,a
+    root1= (-b +sqrt(cmplx(d)))/(2*a)
+    root2 = (-b - sqrt(cmplx(d)))/(2*a)  
+    print *, 'Real roots are :'
+    write(*,'("  root1 =  ", f12.1)')  root1
+    write(*,'(" root2 =  ", f12.1)')  root2
+    return
+    
+end
+
+! This subroutine is called when discriminant is equal to 0, and returns repeatedroot of an equation.
+subroutine getRepeatedRoot(b,a)
+	implicit none
+    real ::root1,root2
+    real ::b,a
+    root1= (-b/(2*a))
+    root2= (-b/(2*a))
+    print *,'Repeated root is:'
+    write(*,'("  root1 =  ", f12.1)')  root1
+    write(*,'(" root2 =  ", f12.1)')  root2
+    return
+    
+end    
+
+!This subroutine is called when discriminant is less than 0, and returns complexroots of an equation.
+subroutine getComplexRoots(d,a,b)
+	implicit none
+    complex ::root1,root2
+    real::d,a,b
+    root1= (-b + sqrt(cmplx(d)))/(2*a)! squareroot(-ve number) is notdefined so typecasting need tobe done.
+    root2=(-b - sqrt(cmplx(d)))/(2*a)
+   ! print * ,'Complex roots are:'
+    write(*,'("complex roots are :  ", "(",f5.1,",",f5.1, ")"  ,"  ",  "(",f5.1,f5.1  ,")", )') root1 , root2 
+	return
+end
+
+! The basic execution of a program starts from the below ,as we specified implicit none edery dariable must be declared before it is used.
+! Unlike other programming languages fortron asks us to declare function before it is used.
+! To compute roots i hade used subroutine and function .
+! The main difference between subroutine and a function is subroutine returns multiple dalues whereas function returns a single dalue.
+
+
+program my1
+	implicit none
+    real :: discriminant
+    real :: d, a, b, c
+    integer :: z
+    call heading()! call to the subroutine heading
+    do  ! infinte running loop until zero entered.
+      print *, "Enter a number, zero to stop:"
+      read *,z
+      if(z==0) then
+        stop
+      else
+        continue 
+
+      !call heading()! call to the subroutine heading
+      call getCoefficients(a,b,c)! call to the subroutine getCoefficients
+      d=discriminant(a,b,c)! call to the function discriminant
+      if(d<0) then
+      	call getComplexRoots(d,a,b)! call to subroutine getComplexRoots
+    
+      else if(d>0) then
+      	call getRealRoots(d,b,a)! call to subroutine getRealRoots
+    
+	  else
+    	call getRepeatedRoot(b,a) ! call to subroutine getRepeatedRoot 
+      end if     
+      endif 
+    enddo 
+    
+       
+end program my1
+
+
